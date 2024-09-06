@@ -12,4 +12,4 @@ messages:[{
 
  
 },{timeseries:true})
-export const chatmodel=mongoose.Schema("chatmodel",chatmsg);
+export const chatmodel=mongoose.model("chatmodel",chatmsg);

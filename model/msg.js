@@ -17,4 +17,4 @@ messagec:{
 
  
 },{timeseries:true})
-export const message=mongoose.Schema("message",msgmodel);
+export const message=mongoose.model("message",msgmodel);

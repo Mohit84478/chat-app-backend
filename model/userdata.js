@@ -19,4 +19,4 @@ password:{
 },
  
 },{timeseries:true})
-export const user=mongoose.Schema("user",usermodel);
+export const user=mongoose.model("user",usermodel);
