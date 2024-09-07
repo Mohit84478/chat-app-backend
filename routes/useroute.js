@@ -6,4 +6,5 @@ import isauth from "../middleware/isauth.js";
   router.route("/login").post(login)
   router.route("/logout").get(logout)
   router.route("/").get( isauth,otheruse)
+  
   export default router

@@ -10,11 +10,11 @@ reciverid:{
     ref:"user",
     require:true
 },
-messagec:{
+message:{
    type:String,
     require:true
 },
 
  
 },{timeseries:true})
-export const message=mongoose.model("message",msgmodel);
+export const messagec=mongoose.model("messagec",msgmodel);

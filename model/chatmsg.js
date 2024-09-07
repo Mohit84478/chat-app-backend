@@ -5,10 +5,8 @@ chatpersons:[{
     ref:"user",
     
 }],
-messages:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"usmessageer",
-}]
+messages: [{ type: mongoose.Schema.Types.ObjectId, 
+    ref: 'messagec' }] 
 
  
 },{timeseries:true})

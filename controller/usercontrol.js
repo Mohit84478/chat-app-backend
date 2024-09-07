@@ -9,7 +9,7 @@ export const register=async (req,res) => {
             return res.status(400).json({message:"all field required"})
             
         }  
-        if (password !=conformpassword) {
+        if (password !== conformpassword) {
             return res.status(400).json({message:"password not match"})
 
         }
@@ -23,7 +23,7 @@ export const register=async (req,res) => {
         await user.create({
             fullname,
             username,
-            password,
+            password:hashpass,
             gmail
         })
     return res.status(200).json({message:"account open susccefully"})
@@ -35,42 +35,41 @@ export const register=async (req,res) => {
 }
     export const  login= async (req,res) => {
         try {
-            const{username,password}=req.body;
-            if (!username||!password) {
-                return res.status(400).json({message:"all field required"})
-            }
-                const usern=await user.findOne({username})
-                
-                if (!usern) {
-                    return res.status(400).json({message:"user not exist or incrocet usename", success:false})
-                   
-                }
-                
-                // const Passwordm = await bcrypt.compare( "password",user.Password)  
-                const Passwordm=await user.findOne({password})
-                
-                if (!Passwordm) {
-                    return res.status(400).json({message:"passwowrnt not match or incrocet ", success:false})
-                   
-                };
-                      const  tokendata={
-                        userid:user.id
-                      }
-                      
-                   
-                      const token=await jwt.sign(tokendata,process.env.jwtkey,{expiresIn:'1d'})
-                      
-                      console.log({_id:user.id,
-                          username:user.username,
-                          fullname:user.fullname})
-                      return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpOnly:true,}).json({
-                          _id:user.id,
-                          username:user.username,
-                          fullname:user.fullname
-                        });
-        } catch (error) {
-            console.log(error)
-        }
+            const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        };
+        const User = await user.findOne({ username });
+        if (!User) {
+            return res.status(400).json({
+                message: "Incorrect username ",
+                success: false
+            })
+        };
+        const isPasswordMatch = await bcrypt.compare(password, User.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({
+                message: "Incorrect password",
+                success: false
+            })
+        };
+        const tokenData = {
+            userId: User._id
+        };
+        
+
+        const token = await jwt.sign(tokenData, process.env.jwtkey, { expiresIn: '1d' });
+
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({
+            _id: User._id,
+            username: User.username,
+            fullName: User.fullName
+          
+        });
+    } catch (error) {
+        console.log(error)
+    }
+    console.log("hello")
         
     }
     export const logout =async (req,res) => {
@@ -85,11 +84,10 @@ export const register=async (req,res) => {
     }
 export const otheruse=async (req,res) => {
     try {
-        const loginuser=req.id
-        console.log(loginuser)
-        const otherusers=await user.find({id:{$ne:loginuser}}).select("-password")
-        return res.json(otherusers)
-    } catch (error) {
+        const loggedInUserId = req.id;
+        const otherUsers = await user.find({ _id: { $ne: loggedInUserId } }).select("-password");
+        return res.status(200).json(otherUsers);
+    }catch (error) {
         
     }
     
