@@ -59,6 +59,7 @@ export const register=async (req,res) => {
         
 
         const token = await jwt.sign(tokenData, process.env.jwtkey, { expiresIn: '1d' });
+       
 
         return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({
             _id: User._id,
